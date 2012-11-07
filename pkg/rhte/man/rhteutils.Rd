@@ -1,4 +1,4 @@
-\name{rht-utils}
+\name{rhte-utils}
 \alias{summary.svystat.rob}
 \alias{print.svystat.rob}
 \alias{coef.svystat.rob}
@@ -6,9 +6,9 @@
 \alias{residuals.svystat.rob}
 \alias{robweights}
 
-\title{rht utility functions}
+\title{rhte utility functions}
 \description{
-The \code{rht} package contains some useful utility functions to extract relevant information from objects of the class \code{"svystat.rob"}.
+The \code{rhte} package contains some useful utility functions to extract relevant information from objects of the class \code{"svystat.rob"}.
 }
 
 \usage{

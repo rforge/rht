@@ -41,5 +41,3 @@ function(y, design, k, type="rht", na.rm=FALSE, control=rht.control(...), ...){
       invisible(total)
    }
 }
-
-

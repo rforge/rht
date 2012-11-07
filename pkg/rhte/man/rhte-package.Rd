@@ -1,13 +1,13 @@
-\name{rht-package}
-\alias{rht-package}
-\alias{rht}
+\name{rhte-package}
+\alias{rhte-package}
+\alias{rhte}
 \docType{package}
 \title{Robust Mean and Ratio Estimation for Complex Samples}
 \description{Robust mean and ratio estimation in complex samples based on M-estimation, trimming, and winsorization.}
 
 \details{
 \tabular{ll}{
-Package: \tab rht\cr
+Package: \tab rhte\cr
 Type: \tab Package\cr
 Version: \tab 0.1-1\cr
 Date: \tab 2011-11-04\cr

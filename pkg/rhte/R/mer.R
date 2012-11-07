@@ -1,13 +1,5 @@
-# Minimum estimated risk (MER) estimation
-# Data: 1 October 2009
-# Author: tobias.schoch
-###############################################################################
-
-
-#================================================================ 
-# mer function
-#----------------------------------------------------------------
-mer <- function(object, init = 0.1, box.lo = 0.0001, tol = 1e-4){
+mer <-
+function(object, init = 0.1, box.lo = 0.0001, tol = 1e-4){
    if(attr(object, "call")[[1]] == "msvyratio.survey.design"){ 
       stop("MER for ratio estimation not yet implemented")
    }
@@ -80,5 +72,3 @@ mer <- function(object, init = 0.1, box.lo = 0.0001, tol = 1e-4){
       cat("see help for modifications of the inital estimate (init), \n the lower box constraint (box.lo), and the numerical convergence \n tolerance (tol)\n ")
    }
 }
-
-

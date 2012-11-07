@@ -1,5 +1,5 @@
-\name{rht-internal}
-\title{rht: Internal functions}
+\name{rhte-internal}
+\title{rhte: Internal functions}
 \alias{.trimmedmean}
 \alias{.winsorizedmean}
 \alias{.svyquantiles}
@@ -13,6 +13,6 @@
 \alias{.inflmest}
 \alias{.updte}
 \encoding{UTF-8}
-\description{Internal functions (should not be called by the user) for the rht package.}
+\description{Internal functions (should not be called by the user) for the rhte package.}
 \keyword{internal}
 

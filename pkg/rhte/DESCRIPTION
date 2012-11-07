@@ -1,4 +1,4 @@
-Package: rht
+Package: rhte
 Type: Package
 Title: Robust Horvitz-Thompson Estimation
 Version: 0.1-1

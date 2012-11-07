@@ -1,4 +1,5 @@
-coef.svystat.rob <- function(object, ...){
+coef.svystat.rob <-
+function(object, ...){
 attr(object, "var") <- NULL
 attr(object, "nobs") <- NULL
 attr(object, "na") <- NULL
@@ -13,4 +14,3 @@ attr(object, "ddigits") <- NULL
 attr(object, "type") <- NULL
 unclass(object)
 }
-

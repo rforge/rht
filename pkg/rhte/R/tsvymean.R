@@ -82,9 +82,3 @@ function(y, design, trim=c(0, 0), type = c("trim", "win"), na.rm = FALSE, contro
       invisible(average)
    }
 }
-
-
-
-
-
-

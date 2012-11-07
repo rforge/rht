@@ -1,14 +1,5 @@
-#=============================================================================== 
-# SUBJECT:  Influence Function of the MAD
-# AUTHORS:  Tobias Schoch, February 8 2009; mod: October 26, 2011
-# LICENSE:  GPL > 2
-# COMMENT:  Huber (1981), p.137-38
-#-------------------------------------------------------------------------------
-# INPUT
-#  object   mean object
-#  ellipse  [not used; but belongs to the generic summary method]
-#-------------------------------------------------------------------------------
-summary.svystat.rob <- function(object, ...){
+summary.svystat.rob <-
+function(object, ...){
    ddigits <- attr(object, "ddigits")
    if(length(object)!=1) stop("no summary available\n")
    cat("\n")
@@ -29,4 +20,3 @@ summary.svystat.rob <- function(object, ...){
    cat("SAMPLING DESIGN\n")
    print(attr(object, "design"))
 }
-
