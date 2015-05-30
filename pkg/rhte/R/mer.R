@@ -1,3 +1,4 @@
+
 mer <-
 function(object, init = 0.1, box.lo = 0.0001, tol = 1e-4){
    if(attr(object, "call")[[1]] == "msvyratio.survey.design"){ 

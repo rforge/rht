@@ -1,3 +1,4 @@
+
 msvyratio <-
 function(numerator, denominator, design, k, na.rm=FALSE, control=rht.control(...), ...){
    # retrieve the control parameters

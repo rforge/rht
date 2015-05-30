@@ -1,3 +1,4 @@
+
 coef.svystat.rob <-
 function(object, ...){
 attr(object, "var") <- NULL
