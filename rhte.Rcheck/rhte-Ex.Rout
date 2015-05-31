@@ -1,0 +1,791 @@
+
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "rhte"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('rhte')
+Loading required package: survey
+Loading required package: grid
+
+Attaching package: 'survey'
+
+The following object is masked from 'package:graphics':
+
+    dotchart
+
+Loading required package: KernSmooth
+KernSmooth 2.23 loaded
+Copyright M. P. Wand 1997-2009
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("mer")
+> ### * mer
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mer
+> ### Title: Minimum Estimated Risk M-Estimation
+> ### Aliases: mer
+> 
+> ### ** Examples
+> 
+> ## load the data
+> data(api)
+> ## define "survey.design" for stratified sampling
+> dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, 
++ fpc=~fpc)
+> ## compute the a robust Horvitz-Thompson mean
+> m1 <- msvymean(~api00, dstrat, type="rht", k=1.3)
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 664.417 9.386       14  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.995      1.3
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+          9 952.149     1e-06 437.242
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> ## compute the minimum estimated risk (MER) estimator based on m1
+> m1.mer <- mer(m1)
+iter    2 value 13064.109745
+iter    4 value 12072.042025
+final  value 12072.042025 
+converged
+
+SUMMARY FOR: Minimum estimated risk estimation, based on 
+robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 771.808 8.797      197  200    0
+---
+ROBUSTNESS PROPERTIES
+ psi   ave.weight optimal k
+ Huber 0.07056    0.02156  
+---
+ALGORITHM PERFORMANCE 
+         MER-iter   mse precision initial low box.constr.
+L-BFGS-B       64 12072     1e-06     0.1           1e-04
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> summary(m1.mer)
+
+SUMMARY FOR: Minimum estimated risk estimation, based on 
+robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 771.808 8.797      197  200    0
+---
+ROBUSTNESS PROPERTIES
+ psi   ave.weight optimal k
+ Huber 0.07056    0.02156  
+---
+ALGORITHM PERFORMANCE 
+         MER-iter   mse precision initial low box.constr.
+L-BFGS-B       64 12072     1e-06     0.1           1e-04
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("msvymean")
+> ### * msvymean
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: msvymean
+> ### Title: Robust M-estimation of the mean for complex samples
+> ### Aliases: msvymean
+> 
+> ### ** Examples
+> 
+> ## load "api" data set from "survey" package (a description of the data
+> ## set can be found there)
+> data(api)
+> ## define "survey.design" for stratified sampling
+> dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, 
++ fpc=~fpc)
+> ## compute a robust Horvitz-Thompson estimate for the mean of the 
+> ## variable "api00" (Academic Performance Index in 2000)
+> rht1 <- msvymean(~api00, dstrat, type="rht", k=1.2)
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 666.898 9.396       22  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.989      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+         11 952.149     1e-06 440.578
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> # get a summary of the estimation
+> summary(rht1)
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 666.898 9.396       22  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.989      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+         11 952.149     1e-06 440.578
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> ## robust Horvitz-Thompson estimates for a domain of the variable. Here
+> ## we are interessted in the robust mean for api00 for 
+> ## (sch.wide == "Yes"). That is the average of the academic performance 
+> ## in 2000 only for the schools that met the school-wide growth target.
+> msvymean(~api00, subset(dstrat, sch.wide == "Yes"), type="rht", k=1.2)
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) (for domains) 
+---
+         mean     SE outliers nobs NA's
+api00 716.372 14.607       57  152   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.898      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+         39 876.629     1e-06 300.966
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+subset(dstrat, sch.wide == "Yes")
+         mean     SE
+api00 716.372 14.607
+> ## to extract the estimate from the object 
+> coef(rht1) 
+   api00 
+666.8978 
+attr(,"robweights")
+  [1] 1.0000000 1.0000000 1.0000000 0.7896905 0.7971733 1.0000000 1.0000000
+  [8] 1.0000000 0.8276729 0.8294863 0.8405363 1.0000000 0.8452278 1.0000000
+ [15] 1.0000000 0.8499720 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [22] 1.0000000 1.0000000 1.0000000 1.0000000 0.8816430 1.0000000 1.0000000
+ [29] 0.8826708 1.0000000 0.8909802 1.0000000 0.8951938 1.0000000 0.8983803
+ [36] 0.9005173 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [43] 1.0000000 1.0000000 1.0000000 0.9213371 1.0000000 1.0000000 1.0000000
+ [50] 1.0000000 0.9326864 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [57] 1.0000000 1.0000000 1.0000000 0.9635464 0.9672390 1.0000000 1.0000000
+ [64] 1.0000000 0.9772260 1.0000000 1.0000000 0.9848526 0.9861353 1.0000000
+ [71] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 0.9991484 0.9991484
+ [78] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [85] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [92] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [99] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[106] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[113] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[120] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[127] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[134] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[141] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[148] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[155] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[162] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[169] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[176] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[183] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[190] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[197] 1.0000000 1.0000000 1.0000000 1.0000000
+attr(,"resid")
+  [1]  -69.175422 -611.431451 -605.431451 -757.157569 -757.157569  -46.175422
+  [7]  -44.175422 -571.431451 -757.157569 -757.157569 -757.157569 -547.431451
+ [13] -757.157569    6.824578    8.824578 -757.157569    9.824578 -529.431451
+ [19]   25.824578 -518.431451   29.824578 -514.431451   33.824578   35.824578
+ [25] -509.431451 -757.157569   41.824578   41.824578 -757.157569   48.824578
+ [31] -757.157569   53.824578 -757.157569 -492.431451 -757.157569 -757.157569
+ [37] -486.431451   61.824578   63.824578   66.824578 -480.431451 -479.431451
+ [43]   71.824578   74.824578   74.824578 -757.157569 -463.431451 -463.431451
+ [49] -462.431451   85.824578 -757.157569   91.824578 -455.431451   97.824578
+ [55] -449.431451  100.824578  110.824578  112.824578 -433.431451 -757.157569
+ [61] -757.157569  120.824578  120.824578  124.824578 -757.157569  128.824578
+ [67]  129.824578 -757.157569 -757.157569 -413.431451  138.824578 -408.431451
+ [73] -405.431451  141.824578  141.824578 -757.157569 -757.157569  148.824578
+ [79]  149.824578 -749.802944  151.824578 -743.802944 -387.431451  163.824578
+ [85]  163.824578  164.824578 -379.431451 -732.802944  170.824578 -726.802944
+ [91] -726.802944  174.824578 -721.802944 -721.802944 -367.431451 -366.431451
+ [97] -364.431451  182.824578  183.824578 -357.431451 -354.431451 -701.802944
+[103] -347.431451 -700.802944  199.824578  199.824578 -346.431451  200.824578
+[109]  201.824578  201.824578 -345.431451  203.824578 -338.431451  208.824578
+[115]  208.824578 -336.431451 -689.802944 -335.431451  211.824578 -687.802944
+[121] -686.802944 -686.802944 -329.431451 -321.431451 -320.431451 -319.431451
+[127]  228.824578  235.824578  237.824578 -661.802944  241.824578 -657.802944
+[133] -655.802944 -655.802944 -654.802944  246.824578 -650.802944  251.824578
+[139]  252.824578  252.824578 -646.802944  255.824578 -643.802944  256.824578
+[145]  258.824578  263.824578 -281.431451  272.824578 -624.802944 -271.431451
+[151]  276.824578 -269.431451  277.824578  278.824578  283.824578 -261.431451
+[157]  288.824578  291.824578  293.824578 -603.802944  297.824578  297.824578
+[163] -249.431451 -597.802944  303.824578 -241.431451 -240.431451  308.824578
+[169]  309.824578  310.824578 -234.431451  314.824578 -583.802944 -583.802944
+[175]  320.824578  337.824578  338.824578  346.824578 -551.802944  351.824578
+[181] -195.431451  364.824578  368.824578  368.824578  372.824578  377.824578
+[187]  379.824578  388.824578  393.824578  395.824578  397.824578 -147.431451
+[193] -499.802944 -144.431451  402.824578 -136.431451  416.824578  424.824578
+[199]  425.824578  425.824578
+attr(,"asymmetric")
+[1] FALSE
+> ## to extract the variance from the object
+> vcov(rht1)
+      Variance
+api00 88.28954
+> 
+> 
+> 
+> cleanEx()
+> nameEx("msvyratio")
+> ### * msvyratio
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: msvyratio
+> ### Title: Robust ratio M-estimation for complex samples
+> ### Aliases: msvyratio
+> 
+> ### ** Examples
+> 
+> ## load "api" data set from "survey" package (a description of the data
+> ## set can be found there)
+> data(api)
+> ## define "survey.design" for stratified sampling
+> dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, 
++ fpc=~fpc)
+> ## compute a robust Horvitz-Thompson estimate for the mean of the 
+> ## variable api00 (Academic Performance Index in 2000)
+> ratio1 <- msvyratio(~api00, ~api99, dstrat, k=1.2, na.rm=TRUE)
+
+SUMMARY FOR: robust ratio estimator (M-estimation) 
+---
+            ratio    SE outliers nobs NA's
+api00/api99  1.05 0.003       40  200    0
+---
+ROBUSTNESS PROPERTIES
+ psi   ave.weight k  
+ Huber 0.952      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision scale
+          6   1.057     1e-06 1.258
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> ## get a summary of the estimation
+> summary(ratio1)
+
+SUMMARY FOR: robust ratio estimator (M-estimation) 
+---
+            ratio    SE outliers nobs NA's
+api00/api99  1.05 0.003       40  200    0
+---
+ROBUSTNESS PROPERTIES
+ psi   ave.weight k  
+ Huber 0.952      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision scale
+          6   1.057     1e-06 1.258
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("msvytotal")
+> ### * msvytotal
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: msvytotal
+> ### Title: Robust M-estimation of the total for complex samples
+> ### Aliases: msvytotal
+> 
+> ### ** Examples
+> 
+> ## load "api" data set from "survey" package (a description of the data
+> ## set can be found there)
+> data(api)
+> ## define "survey.design" for stratified sampling
+> dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, 
++ fpc=~fpc)
+> ## compute a robust Horvitz-Thompson estimate for the total of the 
+> ## variable "api00" (Academic Performance Index in 2000)
+> rht1 <- msvytotal(~api00, dstrat, k=1.2)
+
+SUMMARY FOR: robust Horvitz-Thompson total (M-estimation) 
+---
+        total       SE outliers nobs NA's
+api00 4050931 59375.81       22  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.989      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+         11 952.149     1e-06 440.578
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> # get a summary of the estimation
+> summary(rht1)
+
+SUMMARY FOR: robust Horvitz-Thompson total (M-estimation) 
+---
+        total       SE outliers nobs NA's
+api00 4050931 59375.81       22  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.989      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+         11 952.149     1e-06 440.578
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> ## robust Horvitz-Thompson estimates for a domain of the variable. Here
+> ## we are interessted in the robust total for api00 for 
+> ## (sch.wide == "Yes"). That is the average of the academic performance 
+> ## in 2000 only for the schools that met the school-wide growth target.
+> msvytotal(~api00, subset(dstrat, sch.wide == "Yes"), k=1.2)
+
+SUMMARY FOR: robust Horvitz-Thompson total (M-estimation) 
+---
+        total       SE outliers nobs NA's
+api00 3299970 109742.2       57  152   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k  
+ Huber           0.898      1.2
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+         39 876.629     1e-06 300.966
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+subset(dstrat, sch.wide == "Yes")
+> ## to extract the estimate from the object 
+> coef(rht1) 
+  api00 
+4050931 
+attr(,"robweights")
+  [1] 1.0000000 1.0000000 1.0000000 0.7896905 0.7971733 1.0000000 1.0000000
+  [8] 1.0000000 0.8276729 0.8294863 0.8405363 1.0000000 0.8452278 1.0000000
+ [15] 1.0000000 0.8499720 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [22] 1.0000000 1.0000000 1.0000000 1.0000000 0.8816430 1.0000000 1.0000000
+ [29] 0.8826708 1.0000000 0.8909802 1.0000000 0.8951938 1.0000000 0.8983803
+ [36] 0.9005173 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [43] 1.0000000 1.0000000 1.0000000 0.9213371 1.0000000 1.0000000 1.0000000
+ [50] 1.0000000 0.9326864 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [57] 1.0000000 1.0000000 1.0000000 0.9635464 0.9672390 1.0000000 1.0000000
+ [64] 1.0000000 0.9772260 1.0000000 1.0000000 0.9848526 0.9861353 1.0000000
+ [71] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 0.9991484 0.9991484
+ [78] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [85] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [92] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+ [99] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[106] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[113] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[120] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[127] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[134] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[141] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[148] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[155] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[162] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[169] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[176] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[183] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[190] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+[197] 1.0000000 1.0000000 1.0000000 1.0000000
+attr(,"resid")
+  [1]  -69.175422 -611.431451 -605.431451 -757.157569 -757.157569  -46.175422
+  [7]  -44.175422 -571.431451 -757.157569 -757.157569 -757.157569 -547.431451
+ [13] -757.157569    6.824578    8.824578 -757.157569    9.824578 -529.431451
+ [19]   25.824578 -518.431451   29.824578 -514.431451   33.824578   35.824578
+ [25] -509.431451 -757.157569   41.824578   41.824578 -757.157569   48.824578
+ [31] -757.157569   53.824578 -757.157569 -492.431451 -757.157569 -757.157569
+ [37] -486.431451   61.824578   63.824578   66.824578 -480.431451 -479.431451
+ [43]   71.824578   74.824578   74.824578 -757.157569 -463.431451 -463.431451
+ [49] -462.431451   85.824578 -757.157569   91.824578 -455.431451   97.824578
+ [55] -449.431451  100.824578  110.824578  112.824578 -433.431451 -757.157569
+ [61] -757.157569  120.824578  120.824578  124.824578 -757.157569  128.824578
+ [67]  129.824578 -757.157569 -757.157569 -413.431451  138.824578 -408.431451
+ [73] -405.431451  141.824578  141.824578 -757.157569 -757.157569  148.824578
+ [79]  149.824578 -749.802944  151.824578 -743.802944 -387.431451  163.824578
+ [85]  163.824578  164.824578 -379.431451 -732.802944  170.824578 -726.802944
+ [91] -726.802944  174.824578 -721.802944 -721.802944 -367.431451 -366.431451
+ [97] -364.431451  182.824578  183.824578 -357.431451 -354.431451 -701.802944
+[103] -347.431451 -700.802944  199.824578  199.824578 -346.431451  200.824578
+[109]  201.824578  201.824578 -345.431451  203.824578 -338.431451  208.824578
+[115]  208.824578 -336.431451 -689.802944 -335.431451  211.824578 -687.802944
+[121] -686.802944 -686.802944 -329.431451 -321.431451 -320.431451 -319.431451
+[127]  228.824578  235.824578  237.824578 -661.802944  241.824578 -657.802944
+[133] -655.802944 -655.802944 -654.802944  246.824578 -650.802944  251.824578
+[139]  252.824578  252.824578 -646.802944  255.824578 -643.802944  256.824578
+[145]  258.824578  263.824578 -281.431451  272.824578 -624.802944 -271.431451
+[151]  276.824578 -269.431451  277.824578  278.824578  283.824578 -261.431451
+[157]  288.824578  291.824578  293.824578 -603.802944  297.824578  297.824578
+[163] -249.431451 -597.802944  303.824578 -241.431451 -240.431451  308.824578
+[169]  309.824578  310.824578 -234.431451  314.824578 -583.802944 -583.802944
+[175]  320.824578  337.824578  338.824578  346.824578 -551.802944  351.824578
+[181] -195.431451  364.824578  368.824578  368.824578  372.824578  377.824578
+[187]  379.824578  388.824578  393.824578  395.824578  397.824578 -147.431451
+[193] -499.802944 -144.431451  402.824578 -136.431451  416.824578  424.824578
+[199]  425.824578  425.824578
+attr(,"asymmetric")
+[1] FALSE
+> ## to extract the variance from the object
+> vcov(rht1)
+        Variance
+api00 3525487144
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rhteutils")
+> ### * rhteutils
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rhte-utils
+> ### Title: rhte utility functions
+> ### Aliases: summary.svystat.rob print.svystat.rob coef.svystat.rob
+> ###   vcov.svystat.rob residuals.svystat.rob robweights
+> 
+> ### ** Examples
+> 
+> ## load "api" data set from "survey" package (a description of the data
+> ## set can be found there)
+> data(api)
+> ## define "survey.design" for stratified sampling
+> dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, 
++ fpc=~fpc)
+> ## compute a robust Horvitz-Thompson estimate for the mean of the 
+> ## variable api00 (Academic Performance Index in 2000)
+> rht1 <- msvymean(~api00, dstrat, type="rht", k=4)
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 662.287 9.409        0  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k
+ Huber           1          4
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+          3 952.149     1e-06 434.174
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> # get a summary of the estimation
+> summary(rht1)
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) 
+---
+         mean    SE outliers nobs NA's
+api00 662.287 9.409        0  200   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k
+ Huber           1          4
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision   scale
+          3 952.149     1e-06 434.174
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> ## robust Horvitz-Thompson estimates for a domain of the variable. Here
+> ## we are interessted in the robust mean for api00 in case of 
+> ## (sch.wide == "Yes"). That is the average of the academic performance
+> ## in 2000 only for the schools that met the school-wide growth target.
+> msvymean(~api00, subset(dstrat, sch.wide == "Yes"), k=4, type="rht")
+
+SUMMARY FOR: robust Horvitz-Thompson estimator (M-estimation) (for domains) 
+---
+        mean     SE outliers nobs NA's
+api00 676.53 15.313        0  152   NA
+---
+ROBUSTNESS PROPERTIES
+ psi function    ave.weight k
+ Huber           1          4
+---
+ALGORITHM PERFORMANCE 
+ iterations initial precision  scale
+          3 876.629     1e-06 350.88
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+subset(dstrat, sch.wide == "Yes")
+        mean     SE
+api00 676.53 15.313
+> ## to extract the estimate from the object 
+> coef(rht1) 
+   api00 
+662.2874 
+attr(,"robweights")
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [75] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+[112] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+[149] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+[186] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+attr(,"resid")
+  [1]  -65.94571 -604.41841 -598.41841 -949.34695 -940.34695  -42.94571
+  [7]  -40.94571 -564.41841 -905.34695 -903.34695 -891.34695 -540.41841
+ [13] -886.34695   10.05429   12.05429 -881.34695   13.05429 -522.41841
+ [19]   29.05429 -511.41841   33.05429 -507.41841   37.05429   39.05429
+ [25] -502.41841 -849.34695   45.05429   45.05429 -848.34695   52.05429
+ [31] -840.34695   57.05429 -836.34695 -485.41841 -833.34695 -831.34695
+ [37] -479.41841   65.05429   67.05429   70.05429 -473.41841 -472.41841
+ [43]   75.05429   78.05429   78.05429 -812.34695 -456.41841 -456.41841
+ [49] -455.41841   89.05429 -802.34695   95.05429 -448.41841  101.05429
+ [55] -442.41841  104.05429  114.05429  116.05429 -426.41841 -776.34695
+ [61] -773.34695  124.05429  124.05429  128.05429 -765.34695  132.05429
+ [67]  133.05429 -759.34695 -758.34695 -406.41841  142.05429 -401.41841
+ [73] -398.41841  145.05429  145.05429 -748.34695 -748.34695  152.05429
+ [79]  153.05429 -740.34695  155.05429 -734.34695 -380.41841  167.05429
+ [85]  167.05429  168.05429 -372.41841 -723.34695  174.05429 -717.34695
+ [91] -717.34695  178.05429 -712.34695 -712.34695 -360.41841 -359.41841
+ [97] -357.41841  186.05429  187.05429 -350.41841 -347.41841 -692.34695
+[103] -340.41841 -691.34695  203.05429  203.05429 -339.41841  204.05429
+[109]  205.05429  205.05429 -338.41841  207.05429 -331.41841  212.05429
+[115]  212.05429 -329.41841 -680.34695 -328.41841  215.05429 -678.34695
+[121] -677.34695 -677.34695 -322.41841 -314.41841 -313.41841 -312.41841
+[127]  232.05429  239.05429  241.05429 -652.34695  245.05429 -648.34695
+[133] -646.34695 -646.34695 -645.34695  250.05429 -641.34695  255.05429
+[139]  256.05429  256.05429 -637.34695  259.05429 -634.34695  260.05429
+[145]  262.05429  267.05429 -274.41841  276.05429 -615.34695 -264.41841
+[151]  280.05429 -262.41841  281.05429  282.05429  287.05429 -254.41841
+[157]  292.05429  295.05429  297.05429 -594.34695  301.05429  301.05429
+[163] -242.41841 -588.34695  307.05429 -234.41841 -233.41841  312.05429
+[169]  313.05429  314.05429 -227.41841  318.05429 -574.34695 -574.34695
+[175]  324.05429  341.05429  342.05429  350.05429 -542.34695  355.05429
+[181] -188.41841  368.05429  372.05429  372.05429  376.05429  381.05429
+[187]  383.05429  392.05429  397.05429  399.05429  401.05429 -140.41841
+[193] -490.34695 -137.41841  406.05429 -129.41841  420.05429  428.05429
+[199]  429.05429  429.05429
+attr(,"asymmetric")
+[1] FALSE
+> ## to extract the variance from the object
+> vcov(rht1)
+      Variance
+api00 88.52817
+> 
+> 
+> 
+> cleanEx()
+> nameEx("tsvymean")
+> ### * tsvymean
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: tsvymean
+> ### Title: Trimmed and winsorized weighted mean for complex samples
+> ### Aliases: tsvymean
+> 
+> ### ** Examples
+> 
+> ## load "api" data set from "survey" package (a description of the data
+> ## set can be found there)
+> data(api)
+> ## define "survey.design" for stratified sampling
+> dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, 
++ fpc=~fpc)
+> ## compute a robust Horvitz-Thompson estimate for the mean of the 
+> ## variable "api00" (Academic Performance Index in 2000)
+> tm1 <- tsvymean(~api00, dstrat, trim=c(0.01, 0.09), type="trim")
+
+SUMMARY FOR: trimmed weighted mean 
+---
+         mean     SE outliers nobs NA's
+api00 641.536 10.857       19  200   NA
+---
+ROBUSTNESS PROPERTIES
+           lo   hi
+trimming 0.01 0.91
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> # get a summary of the estimation
+> summary(tm1)
+
+SUMMARY FOR: trimmed weighted mean 
+---
+         mean     SE outliers nobs NA's
+api00 641.536 10.857       19  200   NA
+---
+ROBUSTNESS PROPERTIES
+           lo   hi
+trimming 0.01 0.91
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+svydesign(id = ~1, strata = ~stype, weights = ~pw, data = apistrat, 
+    fpc = ~fpc)
+> ## robust estimates for a domain of the variable. Here we are 
+> ## interessted in the trimmed mean for api00 in case of 
+> ## (sch.wide == "Yes"). That is the average of the academic performance
+> ## in 2000 only for the schools that met the school-wide growth target.
+> tsvymean(~api00, subset(dstrat, sch.wide == "Yes"), trim=c(0.01, 0.09), 
++ type="trim")
+
+SUMMARY FOR: trimmed weighted mean (for domains) 
+---
+         mean     SE outliers nobs NA's
+api00 656.362 12.642       14  152   NA
+---
+ROBUSTNESS PROPERTIES
+           lo   hi
+trimming 0.01 0.91
+---
+SAMPLING DESIGN
+Stratified Independent Sampling design
+subset(dstrat, sch.wide == "Yes")
+> ## to extract the estimate from the object use
+> coef(tm1) 
+   api00 
+641.5356 
+attr(,"robweights")
+  [1] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+  [9] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [17] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [25] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [33] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [41] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [49] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [57] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [65] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [73] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [81] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [89] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [97] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[105] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[113] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[121] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[129] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[137] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[145] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[153] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[161] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[169] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[177] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[185] 1.099883 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+[193] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+attr(,"resid")
+  [1] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+  [9] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [17] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [25] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [33] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [41] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [49] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [57] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [65] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [73] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [81] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [89] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+ [97] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[105] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[113] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[121] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[129] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[137] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[145] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[153] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[161] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[169] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[177] 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883 1.099883
+[185] 1.099883 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+[193] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+> ## to extract the variance from the object use
+> vcov(tm1)
+      Variance
+api00 117.8851
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  3.6 0.03 3.7 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

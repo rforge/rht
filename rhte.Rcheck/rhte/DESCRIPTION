@@ -1,0 +1,15 @@
+Package: rhte
+Type: Package
+Title: Robust Horvitz-Thompson Estimation
+Version: 0.1-2
+Date: 2015-05-30
+Author: Beat Hulliger and Tobias Schoch
+Maintainer: Beat Hulliger <beat.hulliger@fhnw.ch>
+Depends: survey, KernSmooth
+Suggests: sampling
+Description: Robust mean and ratio estimation in complex sampling based on M-estimation, trimming, and winsorization.
+License: GPL (>=2)
+LazyLoad: yes
+NeedsCompilation: no
+Packaged: 2015-05-31 09:31:25 UTC; beat.hulliger
+Built: R 3.2.0; ; 2015-05-31 09:31:26 UTC; windows
