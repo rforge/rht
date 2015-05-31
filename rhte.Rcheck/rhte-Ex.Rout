@@ -779,7 +779,7 @@ api00 117.8851
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  3.6 0.03 3.7 NA NA 
+Time elapsed:  3.74 0.03 3.78 NA NA 
 > grDevices::dev.off()
 null device 
           1 
