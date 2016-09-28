@@ -1,8 +1,8 @@
 Package: rhte
 Type: Package
 Title: Robust Horvitz-Thompson Estimation
-Version: 0.1-2
-Date: 2015-05-30
+Version: 0.1-3
+Date: 2016-09-28
 Author: Beat Hulliger and Tobias Schoch
 Maintainer: Beat Hulliger <beat.hulliger@fhnw.ch>
 Depends: survey, KernSmooth
